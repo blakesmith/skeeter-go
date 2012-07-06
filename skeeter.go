@@ -63,5 +63,5 @@ func imageHandler(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	http.HandleFunc("/", imageHandler)
-	http.ListenAndServe(":9000", nil)
+	http.ListenAndServe(":9001", nil)
 }
