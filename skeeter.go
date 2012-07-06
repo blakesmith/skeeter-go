@@ -30,10 +30,7 @@ func makeImage(url string, width string) string {
 
 	out, err := pipe_commands(curl, convert, jp2a)
 	if err != nil {
-		fmt.Println(err)
-		// Panic
-	} else {
-		fmt.Println(out)
+		fmt.Printf("Commands failed to run: %s\n", err)
 	}
 
 	return string(out)
@@ -47,6 +44,9 @@ func imageHandler(w http.ResponseWriter, r *http.Request) {
 		url = val[0]
 	} else {
 		// 400 Bad Request: [:error, "Image_url query param is required"]
+		http.Error(w, fmt.Sprintf("[:error, \"Image_url query param is required\"]"), 400)
+
+		return
 	}
 
 	if val, ok := r.Form["width"]; ok {
