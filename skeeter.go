@@ -15,7 +15,7 @@ import _ "image/gif"
 func getImage(url string) image.Image {
 	fmt.Printf("Ignoring url %s\n", url)
 
-	file, err := os.Open("/Users/blake/projects/skeeter-go/images/moose.jpg")
+	file, err := os.Open("/Users/blake/projects/skeeter-go/images/moose.png")
 	if err != nil {
 		fmt.Println("Failed to open file!")
 	}
@@ -35,15 +35,23 @@ func asciiDimensions(b image.Rectangle, width int) (w int, h int) {
 	return width, int(ratio * float64(width))
 }
 
+func printAscii(img image.Image) string {
+	return "00000000000"
+}
+
 func toAscii(img image.Image, width int) string {
 	bounds := img.Bounds()
 
 	fmt.Printf("Bounds of image: %d, %d, %d, %d\n", bounds.Min.X, bounds.Max.X, bounds.Min.Y, bounds.Max.Y)
 
 	w, h := asciiDimensions(bounds, width)
+	scaledImage := Resize(img, bounds, w, h)
+
 	fmt.Printf("Ascii dimensions: %d, %d\n", w, h)
 
-	return "00000000000"
+	out := printAscii(scaledImage)
+
+	return out
 }
 
 func makeImage(url string, width string) string {
