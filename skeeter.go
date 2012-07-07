@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"net/http"
 	"image"
+	"net/http"
 	"os"
 	"strconv"
 )
@@ -15,13 +15,13 @@ import _ "image/gif"
 func getImage(url string) image.Image {
 	fmt.Printf("Ignoring url %s\n", url)
 
-	file, err := os.Open("/Users/blake/projects/skeeter-go/images/moose-ascii.jpg")
+	file, err := os.Open("/Users/blake/projects/skeeter-go/images/moose.jpg")
 	if err != nil {
 		fmt.Println("Failed to open file!")
 	}
 
 	im, _, err := image.Decode(file)
-	
+
 	if err != nil {
 		fmt.Println("Failed to decode image!")
 	}
@@ -29,7 +29,20 @@ func getImage(url string) image.Image {
 	return im
 }
 
-func toAscii (img image.Image, width int) string {
+func asciiDimensions(b image.Rectangle, width int) (w int, h int) {
+	ratio := float64(b.Max.Y-b.Min.Y) / float64(b.Max.X-b.Min.X)
+
+	return width, int(ratio * float64(width))
+}
+
+func toAscii(img image.Image, width int) string {
+	bounds := img.Bounds()
+
+	fmt.Printf("Bounds of image: %d, %d, %d, %d\n", bounds.Min.X, bounds.Max.X, bounds.Min.Y, bounds.Max.Y)
+
+	w, h := asciiDimensions(bounds, width)
+	fmt.Printf("Ascii dimensions: %d, %d\n", w, h)
+
 	return "00000000000"
 }
 
