@@ -8,7 +8,6 @@ import (
 	_ "image/jpeg"
 	_ "image/png"
 	"net/http"
-	"os"
 	"strconv"
 )
 
@@ -20,14 +19,13 @@ const (
 )
 
 func getImage(url string) image.Image {
-	fmt.Printf("Ignoring url %s\n", url)
+	res, err := http.Get(url)
 
-	file, err := os.Open("/Users/blake/projects/skeeter-go/images/moose.png")
 	if err != nil {
 		fmt.Println("Failed to open file!")
 	}
 
-	im, _, err := image.Decode(file)
+	im, _, err := image.Decode(res.Body)
 
 	if err != nil {
 		fmt.Println("Failed to decode image!")
@@ -56,7 +54,7 @@ func printAscii(img image.Image) string {
 	bounds := img.Bounds()
 	out := bytes.NewBufferString("")
 
-	for y := bounds.Min.Y; y < bounds.Max.Y; y++ {
+	for y := bounds.Min.Y; y < bounds.Max.Y; y += 2 {
 		for x := bounds.Min.X; x < bounds.Max.X; x++ {
 			r, g, b, _ := img.At(x, y).RGBA()
 			fmt.Fprint(out, getAsciiChar(r, g, b))
