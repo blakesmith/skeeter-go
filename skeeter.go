@@ -8,6 +8,7 @@ import (
 	_ "image/gif"
 	_ "image/jpeg"
 	_ "image/png"
+	"log"
 	"net/http"
 	"strconv"
 )
@@ -69,12 +70,12 @@ func printAscii(img image.Image) string {
 func toAscii(img image.Image, width int) string {
 	bounds := img.Bounds()
 
-	fmt.Printf("Bounds of image: %d, %d, %d, %d\n", bounds.Min.X, bounds.Max.X, bounds.Min.Y, bounds.Max.Y)
+	log.Printf("Bounds of image: %d, %d, %d, %d\n", bounds.Min.X, bounds.Max.X, bounds.Min.Y, bounds.Max.Y)
 
 	w, h := asciiDimensions(bounds, width)
 	scaledImage := Resize(img, bounds, w, h)
 
-	fmt.Printf("Ascii dimensions: %d, %d\n", w, h)
+	log.Printf("Ascii dimensions: %d, %d\n", w, h)
 
 	out := printAscii(scaledImage)
 
@@ -117,7 +118,8 @@ func imageHandler(w http.ResponseWriter, r *http.Request) {
 		width = "80"
 	}
 
-	fmt.Printf("Processing request with url %s, and width %s\n", url, width)
+	log.Printf("Processing request with url %s, and width %s\n", url, width)
+
 	out, err := makeImage(url, width)
 
 	if err != nil {
@@ -128,7 +130,7 @@ func imageHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	fmt.Println("Running server...")
+	log.Println("Running server...")
 	http.HandleFunc("/", imageHandler)
 	http.ListenAndServe(":9001", nil)
 }
