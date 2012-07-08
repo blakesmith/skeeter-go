@@ -2,13 +2,27 @@
 
 This is a port of [skeeter](http://github.com/blakesmith/skeeter) to Go.
 
-## Why?
+## What is it?
 
-The original skeeter implementation was built with ZeroMQ in Ruby and had seperate processes for each piece. Ensuring all the pieces were behaving correctly became a hassle, so I ported it to Go to get familiar with the net/http library in Go.
+Convert this:
 
-## Dependencies
+![Original
+image](https://github.com/blakesmith/skeeter-go/raw/master/images/moose.png)
 
-See [Native Dependencies](https://github.com/blakesmith/skeeter#native-dependencies) from [skeeter](http://github.com/blakesmith/skeeter)
+Into this:
+
+![Converted
+image](https://github.com/blakesmith/skeeter-go/raw/master/images/moose-ascii.jpg)
+
+You make a request to it like so:
+
+  http://skeeter.blakesmith.me/?image_url=http://www.softicons.com/download/animal-icons/animal-icons-by-martin-berube/png/128/moose.png&width=100
+
+And it spits out the ascii art! Magic!
+
+## Why do this?
+
+The original skeeter implementation was built with ZeroMQ in Ruby and had seperate processes for each piece. Ensuring all the pieces were behaving correctly and always up became a hassle. The Ruby version also shelled out to jp2a and imagemagick to do the actual image maniuplation. I ported everything to Go, including image fetching and borrowed the jp2a ascii algorithm to do everything in one native Go program. No external dependencies, just one binary that you drop onto the server and run!
 
 ## Building
 
