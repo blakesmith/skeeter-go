@@ -1,16 +1,23 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"image"
+	_ "image/gif"
+	_ "image/jpeg"
+	_ "image/png"
 	"net/http"
 	"os"
 	"strconv"
 )
 
-import _ "image/png"
-import _ "image/jpeg"
-import _ "image/gif"
+const (
+	REDWEIGHT    = 0.2989
+	GREENWEIGHT  = 0.5866
+	BLUEWEIGHT   = 0.1145
+	ASCIIPALETTE = "   ...',;:clodxkO0KXNWM"
+)
 
 func getImage(url string) image.Image {
 	fmt.Printf("Ignoring url %s\n", url)
@@ -36,7 +43,18 @@ func asciiDimensions(b image.Rectangle, width int) (w int, h int) {
 }
 
 func printAscii(img image.Image) string {
-	return "00000000000"
+	bounds := img.Bounds()
+	out := bytes.NewBufferString("")
+
+	for y := bounds.Min.Y; y < bounds.Max.Y; y++ {
+		for x := bounds.Min.X; x < bounds.Max.X; x++ {
+			//			r, g, b, a := img.At(x, y).RGBA()
+			fmt.Fprint(out, "o")
+		}
+		fmt.Fprint(out, "\n")
+	}
+
+	return out.String()
 }
 
 func toAscii(img image.Image, width int) string {
@@ -72,7 +90,6 @@ func imageHandler(w http.ResponseWriter, r *http.Request) {
 	if val, ok := r.Form["image_url"]; ok {
 		url = val[0]
 	} else {
-		// 400 Bad Request: [:error, "Image_url query param is required"]
 		http.Error(w, fmt.Sprintf("[:error, \"Image_url query param is required\"]"), 400)
 
 		return
