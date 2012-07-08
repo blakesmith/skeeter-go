@@ -40,10 +40,6 @@ CGO_ENABLED=0 GOOS=linux GOARCH=386 go build
 
 This generates the ```skeeter-go``` binary, which you run to start the web server.
 
-## The Future
-
-With the present design, ```curl``` ```convert``` and ```jp2a``` are used to process the image. I'd like to convert these to native Go code.
-
 ## Author
 
 Skeeter is written by Blake Smith <blakesmith0@gmail.com>.
