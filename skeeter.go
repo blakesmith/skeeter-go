@@ -11,6 +11,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"time"
 )
 
 const (
@@ -101,6 +102,7 @@ func makeImage(url string, width string) (string, error) {
 }
 
 func imageHandler(w http.ResponseWriter, r *http.Request) {
+	start := time.Now()
 	r.ParseForm()
 	var url, width string
 
@@ -118,6 +120,7 @@ func imageHandler(w http.ResponseWriter, r *http.Request) {
 		width = "80"
 	}
 
+	log.Println("---")
 	log.Printf("Processing request with url %s, and width %s\n", url, width)
 
 	out, err := makeImage(url, width)
@@ -127,6 +130,8 @@ func imageHandler(w http.ResponseWriter, r *http.Request) {
 	} else {
 		fmt.Fprintf(w, out)
 	}
+	log.Printf("Ascii generated in: %d ms", time.Now().Sub(start).Nanoseconds()/1000000)
+	log.Println("---")
 }
 
 func main() {
