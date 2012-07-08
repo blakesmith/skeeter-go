@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"errors"
+	"flag"
 	"fmt"
 	"image"
 	_ "image/gif"
@@ -19,6 +20,10 @@ const (
 	GREENWEIGHT  = 0.5866
 	BLUEWEIGHT   = 0.1145
 	ASCIIPALETTE = "   ...',;:clodxkO0KXNWM"
+)
+
+var (
+	port = flag.String("port", "9001", "Port to run the server on")
 )
 
 func getImage(url string) (image.Image, error) {
@@ -135,7 +140,9 @@ func imageHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	log.Println("Running server...")
+	flag.Parse()
+
+	log.Printf("Running skeeter on port %s\n", *port)
 	http.HandleFunc("/", imageHandler)
-	http.ListenAndServe(":9001", nil)
+	http.ListenAndServe(fmt.Sprintf(":%s", *port), nil)
 }
