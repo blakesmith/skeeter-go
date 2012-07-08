@@ -36,6 +36,16 @@ func getImage(url string) image.Image {
 	return im
 }
 
+func getAsciiChar(red uint32, green uint32, blue uint32) string {
+	v := (float64(red>>8) * REDWEIGHT / 255.0) +
+		(float64(green>>8) * GREENWEIGHT / 255.0) +
+		(float64(blue>>8) * BLUEWEIGHT / 255.0)
+	idx := int(v * float64(len(ASCIIPALETTE)-1))
+	char := ASCIIPALETTE[idx]
+
+	return string(char)
+}
+
 func asciiDimensions(b image.Rectangle, width int) (w int, h int) {
 	ratio := float64(b.Max.Y-b.Min.Y) / float64(b.Max.X-b.Min.X)
 
@@ -48,8 +58,8 @@ func printAscii(img image.Image) string {
 
 	for y := bounds.Min.Y; y < bounds.Max.Y; y++ {
 		for x := bounds.Min.X; x < bounds.Max.X; x++ {
-			//			r, g, b, a := img.At(x, y).RGBA()
-			fmt.Fprint(out, "o")
+			r, g, b, _ := img.At(x, y).RGBA()
+			fmt.Fprint(out, getAsciiChar(r, g, b))
 		}
 		fmt.Fprint(out, "\n")
 	}
