@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"image"
 	_ "image/gif"
@@ -18,20 +19,20 @@ const (
 	ASCIIPALETTE = "   ...',;:clodxkO0KXNWM"
 )
 
-func getImage(url string) image.Image {
+func getImage(url string) (image.Image, error) {
 	res, err := http.Get(url)
 
 	if err != nil {
-		fmt.Println("Failed to open file!")
+		return nil, errors.New("Failed to open file!")
 	}
 
 	im, _, err := image.Decode(res.Body)
 
 	if err != nil {
-		fmt.Println("Failed to decode image!")
+		return nil, errors.New("Failed to decode image!")
 	}
 
-	return im
+	return im, nil
 }
 
 func getAsciiChar(red uint32, green uint32, blue uint32) string {
@@ -80,15 +81,22 @@ func toAscii(img image.Image, width int) string {
 	return out
 }
 
-func makeImage(url string, width string) string {
-	img := getImage(url)
+func makeImage(url string, width string) (string, error) {
 	w, err := strconv.Atoi(width)
+
 	if err != nil {
-		fmt.Printf("Failed to convert width to an int!")
+		return "", errors.New("Please enter a valid integer 'width' param")
 	}
+
+	img, err := getImage(url)
+
+	if err != nil {
+		return "", err
+	}
+
 	out := toAscii(img, w)
 
-	return string(out)
+	return string(out), nil
 }
 
 func imageHandler(w http.ResponseWriter, r *http.Request) {
@@ -110,9 +118,13 @@ func imageHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	fmt.Printf("Processing request with url %s, and width %s\n", url, width)
-	out := makeImage(url, width)
+	out, err := makeImage(url, width)
 
-	fmt.Fprintf(w, out)
+	if err != nil {
+		http.Error(w, err.Error(), 400)
+	} else {
+		fmt.Fprintf(w, out)
+	}
 }
 
 func main() {
