@@ -14,14 +14,14 @@ See [Native Dependencies](https://github.com/blakesmith/skeeter#native-dependenc
 
 [Install Go](http://golang.org/doc/install)
 
-Then run ```go run skeeter.go``` from within the skeeter directory.
+Then run ```go run skeeter.go resize.go -port=9001``` from within the skeeter directory.
 
 To cross compile for linux 386 from OS X, I followed this wiki page to setup the compiler toolchain: http://code.google.com/p/go-wiki/wiki/WindowsCrossCompiling
 
 Once that's setup, I ran:
 
 ```
-CGO_ENABLED=0 GOOS=linux GOARCH=386 go build skeeter.go
+CGO_ENABLED=0 GOOS=linux GOARCH=386 go build
 ```
 
 This generates the ```skeeter-go``` binary, which you run to start the web server.
