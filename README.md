@@ -22,7 +22,7 @@ And it spits out the ascii art! Magic!
 
 ## Why do this?
 
-The original skeeter implementation was built with ZeroMQ in Ruby and had seperate processes for each piece. Ensuring all the pieces were behaving correctly and always up became a hassle. The Ruby version also shelled out to jp2a and imagemagick to do the actual image maniuplation. I ported everything to Go, including image fetching and borrowed the jp2a ascii algorithm to do everything in one native Go program. No external dependencies, just one binary that you drop onto the server and run!
+The original skeeter implementation was built with ZeroMQ in Ruby and had seperate processes for each piece. Ensuring all the pieces were behaving correctly and always up became a hassle. The Ruby version also shelled out to jp2a and imagemagick to do the actual image manipulation. I ported everything to Go, including image fetching and borrowed the jp2a ascii algorithm to do image manipulation in one native Go program. No external dependencies, just one binary that you drop onto the server and run!
 
 ## Building
 
