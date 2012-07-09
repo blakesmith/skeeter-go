@@ -132,7 +132,7 @@ func imageHandler(w http.ResponseWriter, r *http.Request) {
 	out, err := makeImage(url, width)
 
 	if err != nil {
-		http.Error(w, err.Error(), 400)
+		fmt.Fprintf(w, err.Error())
 	} else {
 		fmt.Fprintf(w, out)
 	}
