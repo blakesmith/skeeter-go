@@ -32,6 +32,7 @@ func getImage(url string) (image.Image, error) {
 	if err != nil {
 		return nil, errors.New("Failed to open file!")
 	}
+	defer res.Body.Close()
 
 	im, _, err := image.Decode(res.Body)
 
